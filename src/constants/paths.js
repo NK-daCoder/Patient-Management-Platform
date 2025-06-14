@@ -1,7 +1,8 @@
 const CareNetPatients = {
     registration: "/",
     login: "/login",
-    
+    patientDashBoard: "/patient-dashboard",
+    patientInfoForm: "/patient-info-form"
 }
 
 const CareNetAdmin = {

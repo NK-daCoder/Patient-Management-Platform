@@ -77,7 +77,7 @@ const Registration = () => {
             <legend className="text-sm tracking-wide">Continue With: </legend>
             <ul className="flex gap-3 mt-5">
                 { TechCompanyLogos.map((company, index) => (
-                    <li>
+                    <li key={`key-${company}-${index}`}>
                         <button type="button" className="border-t-2 border-neutral-700 rounded-md shadow-md size-16 flex flex-col gap-1 items-center justify-center bg-neutral-800">
                             <img src={company.icon} alt={company.label} className="size-5 filter grayscale"/>
                             <span className="text-sm tracking-wide">{company.label}</span>
