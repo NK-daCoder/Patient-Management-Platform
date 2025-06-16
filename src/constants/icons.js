@@ -9,7 +9,9 @@ import medication from "../assets/icons/outline/medication.png";
 import settings from "../assets/icons/outline/settings.png";
 import logout from "../assets/icons/outline/user-logout.png";
 import support from "../assets/icons/outline/support.png";
-
+import search from "../assets/icons/outline/search.png";
+import filter from "../assets/icons/outline/settings-sliders.png";
+import messageAlert from "../assets/icons/outline/messages.png";
 
 const TechCompanyLogos = [
     { label: "Google", icon: googleLogo },
@@ -22,5 +24,5 @@ export {
     TechCompanyLogos, arrowIcon, appointment,
     consultation, home, record,
     medication, settings, logout, 
-    support
+    support, search, filter, messageAlert
 }
