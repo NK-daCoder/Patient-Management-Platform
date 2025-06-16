@@ -6,13 +6,14 @@ import { PatientProfile } from '../components/PatientProfile.jsx';
 import { messageAlert} from '../constants/icons.js';
 
 import { Home } from '../screens/Home.jsx';
+import Appointments from '../screens/Appointments.jsx';
 
 const PatientDashboard = () => {
   const [selectedSection, setSelectedSection] = useState("Home")
   console.log(selectedSection)
   return (
     <section className="flex ">
-      <nav className='shadow-md md:h-screen border-r bg-neutral-950 border-neutral-800 flex flex-col justify-between px-4 py-6 w-[18%]'>
+      <nav className='shadow-md md:h-screen border-r bg-neutral-950 border-neutral-900 flex flex-col justify-between px-4 py-6 w-[15%]'>
         <Link 
           to={CareNetPatients.patientDashBoard} 
           className="flex flex-col items-center gap-1 px-2 hover:shadow-lg transition-all duration-200 border-b border-neutral-500 pb-5"
@@ -63,8 +64,8 @@ const PatientDashboard = () => {
 
         <PatientProfile/>
       </nav>
-      <section className="md:h-screen flex-grow px-2 py-3 overflow-y-auto">
-        <header className="flex justify-between items-center border-t px-6 container mx-auto  border-neutral-700 rounded-3xl shadow-md bg-neutral-950 p-3">
+      <section className="md:h-screen flex-grow px-5 py-3 overflow-y-auto">
+        <header className="flex justify-between items-center border-t px-6 container mx-auto  border-neutral-700 rounded-xl shadow-md bg-neutral-950 p-3">
             <h2 className="text-md tracking-wide text-neutral-300">{selectedSection}</h2>
             <ul>
               {[messageAlert].map((item, index) => (
@@ -77,9 +78,7 @@ const PatientDashboard = () => {
             </ul>
         </header>
         
-        <Home 
-          setScreen={setSelectedSection}
-        />
+        <Appointments/>
 
       </section>
     </section>
