@@ -1,5 +1,5 @@
 import React from 'react';
-import { signUpImage } from '../constants/wallpaper';
+import { registrationImage, signUpImage } from '../constants/wallpaper';
 import { Link } from 'react-router-dom';
 import { CareNetAdmin, CareNetPatients } from '../constants/paths';
 import { TechCompanyLogos } from '../constants/icons';
@@ -7,7 +7,7 @@ import { TechCompanyLogos } from '../constants/icons';
 const Login = () => {
   return (
     <section className="flex items-center justify-center h-screen bg-neutral-900 p-4">
-      <div className="container mx-auto flex w-full bg-neutral-950/70 border-l border-neutral-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="flex w-full bg-neutral-950 border-l border-neutral-800 rounded-3xl overflow-hidden shadow-2xl">
         <form className="flex flex-col justify-center flex-1 p-10 text-white">
           <fieldset className="flex flex-col gap-6">
             <legend className="text-3xl font-light mb-8 tracking-wide">Login</legend>
@@ -61,9 +61,9 @@ const Login = () => {
 
         <div className="flex-1 hidden md:block">
           <img 
-            src={signUpImage} 
+            src={registrationImage} 
             alt="Registration visual" 
-            className="h-full w-full object-cover grayscale contrast-125 brightness-90"
+            className="h-full w-full object-cover contrast-125 brightness-90"
           />
         </div>
       </div>

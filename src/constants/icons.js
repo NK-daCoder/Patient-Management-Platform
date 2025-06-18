@@ -12,6 +12,13 @@ import support from "../assets/icons/outline/support.png";
 import search from "../assets/icons/outline/search.png";
 import filter from "../assets/icons/outline/settings-sliders.png";
 import messageAlert from "../assets/icons/outline/messages.png";
+import departments from "../assets/icons/outline/department-structure.png";
+import doctors from "../assets/icons/outline/doctors.png";
+import patient from "../assets/icons/outline/patient.png";
+import inventory from "../assets/icons/outline/inventory-alt.png";
+import earnings from "../assets/icons/outline/sack-dollar.png";
+import notification from "../assets/icons/outline/bell.png";
+import dashboardPanel from "../assets/icons/outline/dashboard-panel.png";
 
 const TechCompanyLogos = [
     { label: "Google", icon: googleLogo },
@@ -24,5 +31,8 @@ export {
     TechCompanyLogos, arrowIcon, appointment,
     consultation, home, record,
     medication, settings, logout, 
-    support, search, filter, messageAlert
+    support, search, filter, messageAlert,
+    departments, doctors, patient, 
+    inventory, earnings, notification,
+    dashboardPanel 
 }

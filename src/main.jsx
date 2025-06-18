@@ -8,6 +8,7 @@ import { Login } from './pages/Login.jsx';
 import { AdminLogin } from './pages/AdminLogin';
 import PatientDashboard from './pages/PatientDashboard';
 import PatientInfoForm from './pages/PatientInfoForm';
+import AdminDashBoard from './pages/AdminDashBoard';
 
 
 ReactDOM.createRoot(root).render(
@@ -18,6 +19,7 @@ ReactDOM.createRoot(root).render(
       <Route path={CareNetAdmin.login} element={<AdminLogin/>}/>
       <Route path={CareNetPatients.patientDashBoard} element={<PatientDashboard/>}/>
       <Route path={CareNetPatients.patientInfoForm} element={<PatientInfoForm/>}/>
+      <Route path={CareNetAdmin.admin} element={<AdminDashBoard/>}/>
     </Routes>
   </BrowserRouter>
 );
