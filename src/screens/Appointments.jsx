@@ -8,23 +8,26 @@ const doctorList = [
   { id: 'doc3', label: 'Dr. Leila Patel - Therapist' }
 ];
 
-const Appointments = () => {
+const Appointments = ({ theme }) => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [reason, setReason] = useState("");
   const [date, setDate] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [rescheduleId, setRescheduleId] = useState(null);
 
+  const isLight = theme === 'light';
+  const bgColor = isLight ? "bg-white" : "bg-neutral-900";
+  const textColor = isLight ? "text-black" : "text-white";
+  const subText = isLight ? "text-gray-600" : "text-stone-500";
+  const inputBg = isLight ? "bg-white text-black border-stone-200" : "bg-stone-800 text-white border-stone-500";
+
   useEffect(() => {
-    // Load appointments
     const stored = JSON.parse(localStorage.getItem("appointments")) || [];
     setAppointments(stored);
 
-    // Check if we're rescheduling
     const rescheduleData = JSON.parse(localStorage.getItem("reschedule_appointment"));
     if (rescheduleData) {
       const { doctor, reason, date, id } = rescheduleData;
-
       const matchedDoctor = doctorList.find(doc => doctor.includes(doc.label));
       setSelectedDoctor(matchedDoctor?.id || "");
       setReason(reason);
@@ -49,21 +52,14 @@ const Appointments = () => {
       date
     };
 
-    let updated;
-
-    if (rescheduleId) {
-      // Remove old appointment and replace with new
-      updated = appointments.filter(appt => appt.id !== rescheduleId);
-      updated.push(newAppt);
-    } else {
-      updated = [...appointments, newAppt];
-    }
+    const updated = rescheduleId
+      ? appointments.filter(appt => appt.id !== rescheduleId).concat(newAppt)
+      : [...appointments, newAppt];
 
     localStorage.setItem("appointments", JSON.stringify(updated));
     localStorage.removeItem("reschedule_appointment");
     setAppointments(updated);
 
-    // Reset form
     setSelectedDoctor("");
     setReason("");
     setDate("");
@@ -73,52 +69,58 @@ const Appointments = () => {
   };
 
   return (
-    <Section className="flex flex-col mx-auto container">
-      <h1 className="tracking-wide text-white text-lg">
-        {rescheduleId ? "Reschedule Appointment" : "Hey There 👋"}
+    <Section className={`flex flex-col mx-auto container ${textColor}`} theme={theme}>
+      <h1 className={`tracking-wide text-2xl font-semibold ${textColor}`}>
+        {rescheduleId ? "📅 Reschedule Appointment" : "Hey There 👋"}
       </h1>
-      <p className="text-sm text-stone-600 my-1">
+      <p className={`text-sm mt-1 ${subText}`}>
         {rescheduleId
           ? "Update the details below to reschedule your appointment."
-          : "Fill out the form below to schedule an appointment in just 1 minute"}
+          : "Fill out the form below to schedule an appointment in just 1 minute."}
       </p>
 
-      <form onSubmit={handleSubmit} className="my-4 grid gap-5">
+      <form onSubmit={handleSubmit} className="my-6 grid gap-5">
         {/* Doctor Selection */}
         <div className="flex flex-col gap-2">
-          <h3 className="text-stone-500 text-sm">Select A Doctor</h3>
+          <h3 className={`${subText} text-sm font-medium`}>Select A Doctor</h3>
           <Dropdown
             data={doctorList}
             value={selectedDoctor}
             onChange={(val) => setSelectedDoctor(val)}
+            theme={theme}
           />
         </div>
 
-        {/* Reason */}
+        {/* Reason for Appointment */}
         <div className="flex flex-col gap-2">
-          <h3 className="text-stone-500 text-sm">Reason for Appointment</h3>
+          <h3 className={`${subText} text-sm font-medium`}>Reason for Appointment</h3>
           <textarea
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="rounded-xl p-3 bg-stone-800 text-white h-40"
+            className={`rounded-xl p-3 h-40 resize-none shadow-sm border-t text-sm ${inputBg}`}
             placeholder="Describe your concern..."
           />
         </div>
 
-        {/* Date */}
+        {/* Date Selection */}
         <div className="flex flex-col gap-2">
-          <h3 className="text-stone-500 text-sm">Expected Appointment Date</h3>
+          <h3 className={`${subText} text-sm font-medium`}>Expected Appointment Date</h3>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-xl p-3 bg-stone-800 text-white"
+            className={`rounded-xl p-3 shadow-sm text-sm ${inputBg}`}
+           
           />
         </div>
 
         <button
           type="submit"
-          className='bg-green-700 border-t border-green-500 hover:bg-green-800 tracking-wide shadow-md mt-4 rounded-full text-white p-3'
+          className={`rounded-full px-4 py-3 mt-4 font-medium tracking-wide shadow-md text-white transition ${
+            rescheduleId
+              ? 'bg-blue-700 border-t border-blue-500 hover:bg-blue-800'
+              : 'bg-green-700 border-t border-green-500 hover:bg-green-800'
+          }`}
         >
           {rescheduleId ? "Update Appointment" : "Schedule Appointment"}
         </button>

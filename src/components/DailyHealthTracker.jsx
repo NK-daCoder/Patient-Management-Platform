@@ -9,21 +9,21 @@ import {
 } from "recharts";
 import { getTodayKey } from "../utils/utils";
 
-const ChartBlock = ({ title, data, dataKey, color }) => (
+const ChartBlock = ({ title, data, dataKey, color, theme }) => (
   <div>
-    <h4 className="text-stone-400 text-xs mb-1">{title}</h4>
+    <h4 className={`text-xs mb-1 ${theme === 'light' ? 'text-gray-700' : 'text-stone-400'}`}>{title}</h4>
     <ResponsiveContainer width="100%" height={150}>
       <LineChart data={data}>
-        <XAxis dataKey="date" stroke="#aaa" />
-        <YAxis stroke="#aaa" />
+        <XAxis dataKey="date" stroke={theme === 'light' ? '#666' : '#aaa'} />
+        <YAxis stroke={theme === 'light' ? '#666' : '#aaa'} />
         <Tooltip
           contentStyle={{
-            backgroundColor: "#1e1e1e",
+            backgroundColor: theme === 'light' ? "#f9f9f9" : "#1e1e1e",
             borderRadius: "0.5rem",
             border: "none",
           }}
-          labelStyle={{ color: "#ccc" }}
-          itemStyle={{ color: "#fff" }}
+          labelStyle={{ color: theme === 'light' ? "#444" : "#ccc" }}
+          itemStyle={{ color: theme === 'light' ? "#000" : "#fff" }}
         />
         <Line
           type="monotone"
@@ -38,7 +38,7 @@ const ChartBlock = ({ title, data, dataKey, color }) => (
   </div>
 );
 
-const DailyHealthTracker = () => {
+const DailyHealthTracker = ({ theme }) => {
   const [mood, setMood] = useState(5);
   const [steps, setSteps] = useState("");
   const [sleep, setSleep] = useState("");
@@ -84,13 +84,18 @@ const DailyHealthTracker = () => {
     setChartData(data);
   };
 
+  const bgCard = theme === 'light' ? 'bg-white border border-gray-200' : 'bg-stone-900 border-t border-stone-500';
+  const textMain = theme === 'light' ? 'text-black' : 'text-stone-300';
+  const textSecondary = theme === 'light' ? 'text-gray-700' : 'text-stone-400';
+  const inputStyle = theme === 'light' ? 'bg-gray-100 text-black' : 'bg-stone-800 text-white';
+
   return (
-    <div className="bg-stone-900 border-t border-stone-500 rounded-xl p-6 shadow-lg space-y-6 w-full">
-      <h2 className="text-stone-300 text-lg font-semibold">🩺 Daily Health Tracker</h2>
+    <div className={`${bgCard} rounded-xl p-6 shadow-lg space-y-6 w-full`}>
+      <h2 className={`text-lg font-semibold ${textMain}`}>🩺 Daily Health Tracker</h2>
 
       {/* Mood Slider */}
       <div>
-        <label className="block text-stone-400 text-sm mb-1">
+        <label className={`block text-sm mb-1 ${textSecondary}`}>
           How are you feeling today?
         </label>
         <input
@@ -111,14 +116,14 @@ const DailyHealthTracker = () => {
       </div>
 
       {/* Metrics Inputs */}
-      <div className="grid grid-cols-3 gap-4 text-sm text-stone-400">
+      <div className={`grid grid-cols-3 gap-4 text-sm ${textSecondary}`}>
         <div>
           <input
             type="number"
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
             placeholder="Steps"
-            className="w-full bg-stone-800 text-white text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400"
+            className={`w-full text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400 ${inputStyle}`}
           />
           <p className="mt-1 text-center">Steps</p>
         </div>
@@ -129,7 +134,7 @@ const DailyHealthTracker = () => {
             value={sleep}
             onChange={(e) => setSleep(e.target.value)}
             placeholder="Sleep"
-            className="w-full bg-stone-800 text-white text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400"
+            className={`w-full text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400 ${inputStyle}`}
           />
           <p className="mt-1 text-center">Sleep (hrs)</p>
         </div>
@@ -140,7 +145,7 @@ const DailyHealthTracker = () => {
             value={water}
             onChange={(e) => setWater(e.target.value)}
             placeholder="Water"
-            className="w-full bg-stone-800 text-white text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400"
+            className={`w-full text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400 ${inputStyle}`}
           />
           <p className="mt-1 text-center">Water (L)</p>
         </div>
@@ -155,21 +160,21 @@ const DailyHealthTracker = () => {
       </button>
 
       {/* Charts Section */}
-      <section className=" rounded-lg p-4 space-y-6 mt-8 gap-3">
-        <h3 className="text-stone-300 text-sm font-semibold tracking-wide">📈 Weekly Overview</h3>
+      <section className="rounded-lg p-4 space-y-6 mt-8 gap-3">
+        <h3 className={`text-sm font-semibold tracking-wide ${textMain}`}>📈 Weekly Overview</h3>
         <section className="grid md:grid-cols-2 gap-3">
-            <div className="w-full bg-stone-800 p-5 rounded-lg border-t border-neutral-700 shadow-md">
-                <ChartBlock title="Mood" data={chartData} dataKey="mood" color="#3b82f6" />
-            </div>
-            <div className="w-full bg-stone-800 p-5 rounded-lg border-t border-neutral-700 shadow-md">
-                <ChartBlock title="Sleep (hrs)" data={chartData} dataKey="sleep" color="#10b981" />
-            </div>
-            <div className="w-full bg-stone-800 p-5 rounded-lg border-t border-neutral-700 shadow-md">
-                <ChartBlock title="Water (L)" data={chartData} dataKey="water" color="#0ea5e9" />
-            </div>
-            <div className="w-full bg-stone-800 p-5 rounded-lg border-t border-neutral-700 shadow-md">
-                <ChartBlock title="Steps" data={chartData} dataKey="steps" color="#f59e0b" />
-            </div>
+          <div className={`w-full p-5 rounded-lg border-t shadow-md ${theme === 'light' ? 'bg-gray-100 border-gray-200' : 'bg-stone-800 border-neutral-700'}`}>
+            <ChartBlock title="Mood" data={chartData} dataKey="mood" color="#3b82f6" theme={theme} />
+          </div>
+          <div className={`w-full p-5 rounded-lg border-t shadow-md ${theme === 'light' ? 'bg-gray-100 border-gray-200' : 'bg-stone-800 border-neutral-700'}`}>
+            <ChartBlock title="Sleep (hrs)" data={chartData} dataKey="sleep" color="#10b981" theme={theme} />
+          </div>
+          <div className={`w-full p-5 rounded-lg border-t shadow-md ${theme === 'light' ? 'bg-gray-100 border-gray-200' : 'bg-stone-800 border-neutral-700'}`}>
+            <ChartBlock title="Water (L)" data={chartData} dataKey="water" color="#0ea5e9" theme={theme} />
+          </div>
+          <div className={`w-full p-5 rounded-lg border-t shadow-md ${theme === 'light' ? 'bg-gray-100 border-gray-200' : 'bg-stone-800 border-neutral-700'}`}>
+            <ChartBlock title="Steps" data={chartData} dataKey="steps" color="#f59e0b" theme={theme} />
+          </div>
         </section>
       </section>
     </div>

@@ -1,0 +1,22 @@
+.fade-wrapper {
+    position: relative;
+}
+
+.section-fade {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+.section-fade.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    position: relative;
+}
+  

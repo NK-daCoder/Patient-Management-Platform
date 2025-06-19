@@ -12,7 +12,7 @@ const getDateKey = () => {
   return `bpTracker-${new Date().toISOString().split("T")[0]}`;
 };
 
-const BloodPressureTracker = () => {
+const BloodPressureTracker = ({ theme }) => {
   const [systolic, setSystolic] = useState("");
   const [diastolic, setDiastolic] = useState("");
   const [pulse, setPulse] = useState("");
@@ -53,63 +53,80 @@ const BloodPressureTracker = () => {
     setChartData(data);
   };
 
+  const isLight = theme === "light";
+
   return (
-    <div className="bg-stone-900 rounded-xl p-6 shadow-lg space-y-6 w-full mx-auto">
-      <h2 className="text-stone-300 text-lg font-semibold">Blood Pressure Tracker</h2>
+    <div
+      className={`rounded-xl p-6 shadow-lg space-y-6 w-full mx-auto ${
+        isLight ? "bg-white text-gray-900" : "bg-stone-900 text-stone-300"
+      }`}
+    >
+      <h2 className="text-lg font-semibold">Blood Pressure Tracker</h2>
 
       {/* Input fields */}
-      <div className="grid grid-cols-3 gap-4 text-sm text-stone-400">
-        <div>
-          <input
-            type="number"
-            value={systolic}
-            onChange={(e) => setSystolic(e.target.value)}
-            placeholder="Systolic"
-            className="w-full bg-stone-800 text-white text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400"
-          />
-          <p className="mt-1 text-center">Systolic</p>
-        </div>
-        <div>
-          <input
-            type="number"
-            value={diastolic}
-            onChange={(e) => setDiastolic(e.target.value)}
-            placeholder="Diastolic"
-            className="w-full bg-stone-800 text-white text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400"
-          />
-          <p className="mt-1 text-center">Diastolic</p>
-        </div>
-        <div>
-          <input
-            type="number"
-            value={pulse}
-            onChange={(e) => setPulse(e.target.value)}
-            placeholder="Pulse"
-            className="w-full bg-stone-800 text-white text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400"
-          />
-          <p className="mt-1 text-center">Pulse (bpm)</p>
-        </div>
+      <div
+        className={`grid grid-cols-3 gap-4 text-sm ${
+          isLight ? "text-gray-700" : "text-stone-400"
+        }`}
+      >
+        {[["Systolic", systolic, setSystolic], ["Diastolic", diastolic, setDiastolic], ["Pulse", pulse, setPulse]].map(
+          ([label, value, setter], idx) => (
+            <div key={idx}>
+              <input
+                type="number"
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                placeholder={label}
+                className={`w-full ${
+                  isLight
+                    ? "bg-gray-100 text-black"
+                    : "bg-stone-800 text-white"
+                } text-center rounded-lg py-2 px-3 focus:outline-none focus:ring-1 focus:ring-blue-400`}
+              />
+              <p className="mt-1 text-center">{label === "Pulse" ? "Pulse (bpm)" : label}</p>
+            </div>
+          )
+        )}
       </div>
 
       {/* Submit Button */}
       <button
         onClick={handleSubmit}
-        className="w-full mt-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition"
+        className={`w-full mt-4 py-2 text-sm font-semibold text-white rounded-lg transition ${
+          isLight ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-600 hover:bg-blue-500"
+        }`}
       >
         Save Today's BP
       </button>
 
-      {/* Blood Pressure Chart */}
-      <div className="bg-stone-800 rounded-lg p-4 mt-6">
-        <h3 className="text-stone-300 text-sm font-semibold mb-3">BP Trend (7 Days)</h3>
+      {/* Chart */}
+      <div
+        className={`rounded-lg p-4 mt-6 ${
+          isLight ? "bg-gray-100" : "bg-stone-800"
+        }`}
+      >
+        <h3 className="text-sm font-semibold mb-3">
+          BP Trend (7 Days)
+        </h3>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={chartData}>
-            <XAxis dataKey="date" stroke="#aaa" />
-            <YAxis domain={[50, 180]} tickCount={6} stroke="#aaa" />
+            <XAxis
+              dataKey="date"
+              stroke={isLight ? "#555" : "#aaa"}
+            />
+            <YAxis
+              domain={[50, 180]}
+              tickCount={6}
+              stroke={isLight ? "#555" : "#aaa"}
+            />
             <Tooltip
-              contentStyle={{ backgroundColor: "#1e1e1e", borderRadius: "0.5rem", border: "none" }}
-              labelStyle={{ color: "#ccc" }}
-              itemStyle={{ color: "#fff" }}
+              contentStyle={{
+                backgroundColor: isLight ? "#f9f9f9" : "#1e1e1e",
+                borderRadius: "0.5rem",
+                border: "none",
+              }}
+              labelStyle={{ color: isLight ? "#333" : "#ccc" }}
+              itemStyle={{ color: isLight ? "#111" : "#fff" }}
             />
             <Line
               type="monotone"

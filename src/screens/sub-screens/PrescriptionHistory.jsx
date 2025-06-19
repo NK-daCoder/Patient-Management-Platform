@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import html2pdf from "html2pdf.js";
 import Section from "../../components/Section";
 
-const PrescriptionHistory = () => {
+const PrescriptionHistory = ({theme}) => {
   const [history, setHistory] = useState([]);
   const pdfRef = useRef();
 
@@ -44,7 +44,7 @@ const PrescriptionHistory = () => {
   };
 
   return (
-    <Section className="space-y-4">
+    <Section className="space-y-4" theme={theme}>
       <div className="flex justify-between items-center">
         <h1 className="text-white text-xl font-semibold tracking-tight">Prescription History 📜</h1>
         {history.length > 0 && (

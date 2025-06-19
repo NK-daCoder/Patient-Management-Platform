@@ -8,7 +8,8 @@ import 'react-phone-input-2/lib/style.css';
 
 const Registration = () => {
   return (
-    <section className="min-h-screen bg-neutral-900 flex items-center justify-center px-4 py-10">
+    <div className="bg-neutral-900">
+      <section className="min-h-screen bg-neutral-900 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-6xl bg-neutral-950 border border-neutral-800 shadow-2xl rounded-2xl flex flex-col md:flex-row overflow-hidden">
         
         {/* Left Side - Form */}
@@ -104,6 +105,8 @@ const Registration = () => {
         </div>
       </div>
     </section>
+    </div>
+    
   );
 };
 

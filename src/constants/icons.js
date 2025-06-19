@@ -19,6 +19,8 @@ import inventory from "../assets/icons/outline/inventory-alt.png";
 import earnings from "../assets/icons/outline/sack-dollar.png";
 import notification from "../assets/icons/outline/bell.png";
 import dashboardPanel from "../assets/icons/outline/dashboard-panel.png";
+import placeholderImage from "../assets/icons/placeholder.jpg"
+
 
 const TechCompanyLogos = [
     { label: "Google", icon: googleLogo },
@@ -34,5 +36,5 @@ export {
     support, search, filter, messageAlert,
     departments, doctors, patient, 
     inventory, earnings, notification,
-    dashboardPanel 
+    dashboardPanel, placeholderImage 
 }
