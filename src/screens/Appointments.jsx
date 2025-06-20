@@ -1,130 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import Section from "../components/Section.jsx";
-import Dropdown from '../components/Dropdown.jsx';
+import React, { useState, useEffect } from "react";
+import Section from "../components/Section";
 
-const doctorList = [
-  { id: 'doc1', label: 'Dr. Amanda Blake - General Practitioner' },
-  { id: 'doc2', label: 'Dr. Jacob Mokoena - Dentist' },
-  { id: 'doc3', label: 'Dr. Leila Patel - Therapist' }
-];
+const appointmentTypes = {
+  Dental: ["Dr. Smile", "Dr. Molara"],
+  Surgical: ["Dr. Cutwell", "Dr. Stitch"],
+  Therapeutic: ["Dr. Calm", "Dr. Heal"],
+  Pediatric: ["Dr. Kidd", "Dr. Junior"],
+};
 
 const Appointments = ({ theme }) => {
-  const [selectedDoctor, setSelectedDoctor] = useState("");
-  const [reason, setReason] = useState("");
+  const [appointmentType, setAppointmentType] = useState("");
+  const [doctor, setDoctor] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [reason, setReason] = useState("");
   const [appointments, setAppointments] = useState([]);
-  const [rescheduleId, setRescheduleId] = useState(null);
-
-  const isLight = theme === 'light';
-  const bgColor = isLight ? "bg-white" : "bg-neutral-900";
-  const textColor = isLight ? "text-black" : "text-white";
-  const subText = isLight ? "text-gray-600" : "text-stone-500";
-  const inputBg = isLight ? "bg-white text-black border-stone-200" : "bg-stone-800 text-white border-stone-500";
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("appointments")) || [];
+    const stored = JSON.parse(localStorage.getItem("patient_appointments")) || [];
     setAppointments(stored);
-
-    const rescheduleData = JSON.parse(localStorage.getItem("reschedule_appointment"));
-    if (rescheduleData) {
-      const { doctor, reason, date, id } = rescheduleData;
-      const matchedDoctor = doctorList.find(doc => doctor.includes(doc.label));
-      setSelectedDoctor(matchedDoctor?.id || "");
-      setReason(reason);
-      setDate(date);
-      setRescheduleId(id);
-    }
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!selectedDoctor || !reason || !date) {
-      alert("Please fill out all fields");
+  const saveAppointment = () => {
+    if (!appointmentType || !doctor || !date || !time || !reason.trim()) {
+      alert("⛔ Please fill in all the fields including reason for visit.");
       return;
     }
 
-    const doctorName = doctorList.find(doc => doc.id === selectedDoctor)?.label || "Unknown Doctor";
-
-    const newAppt = {
-      id: rescheduleId || Date.now(),
-      doctor: doctorName,
-      reason,
-      date
-    };
-
-    const updated = rescheduleId
-      ? appointments.filter(appt => appt.id !== rescheduleId).concat(newAppt)
-      : [...appointments, newAppt];
-
-    localStorage.setItem("appointments", JSON.stringify(updated));
-    localStorage.removeItem("reschedule_appointment");
+    const newAppointment = { appointmentType, doctor, date, time, reason };
+    const updated = [...appointments, newAppointment];
+    localStorage.setItem("patient_appointments", JSON.stringify(updated));
     setAppointments(updated);
 
-    setSelectedDoctor("");
-    setReason("");
+    // Reset fields
+    setAppointmentType("");
+    setDoctor("");
     setDate("");
-    setRescheduleId(null);
-
-    alert(rescheduleId ? "🔄 Appointment rescheduled!" : "✅ Appointment scheduled!");
+    setTime("");
+    setReason("");
   };
 
+  const isLight = theme === "light";
+  const cardStyle = isLight ? "bg-white text-black" : "bg-neutral-900 text-stone-300";
+  const glassStyle = "backdrop-blur-md bg-white/10 border border-white/10 shadow-xl";
+
   return (
-    <Section className={`flex flex-col mx-auto container ${textColor}`} theme={theme}>
-      <h1 className={`tracking-wide text-2xl font-semibold ${textColor}`}>
-        {rescheduleId ? "📅 Reschedule Appointment" : "Hey There 👋"}
-      </h1>
-      <p className={`text-sm mt-1 ${subText}`}>
-        {rescheduleId
-          ? "Update the details below to reschedule your appointment."
-          : "Fill out the form below to schedule an appointment in just 1 minute."}
-      </p>
+    <Section className={`w-full container mx-auto rounded-xl p-6 ${cardStyle}`} theme={theme}>
+      <h2 className="text-xl font-semibold mb-4">📅 Book an Appointment</h2>
 
-      <form onSubmit={handleSubmit} className="my-6 grid gap-5">
-        {/* Doctor Selection */}
-        <div className="flex flex-col gap-2">
-          <h3 className={`${subText} text-sm font-medium`}>Select A Doctor</h3>
-          <Dropdown
-            data={doctorList}
-            value={selectedDoctor}
-            onChange={(val) => setSelectedDoctor(val)}
-            theme={theme}
-          />
+      <div className="grid sm:grid-cols-2 gap-4">
+        {/* Appointment Type */}
+        <div>
+          <label className="text-sm mb-1 block">Type</label>
+          <select
+            value={appointmentType}
+            onChange={(e) => {
+              setAppointmentType(e.target.value);
+              setDoctor("");
+            }}
+            className={`w-full py-2 px-3 rounded-lg text-sm focus:outline-none focus:ring-2 ${
+              isLight ? "bg-gray-100 text-black" : "bg-stone-800 text-white"
+            }`}
+          >
+            <option value="">Select type</option>
+            {Object.keys(appointmentTypes).map((type) => (
+              <option key={type}>{type}</option>
+            ))}
+          </select>
         </div>
 
-        {/* Reason for Appointment */}
-        <div className="flex flex-col gap-2">
-          <h3 className={`${subText} text-sm font-medium`}>Reason for Appointment</h3>
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            className={`rounded-xl p-3 h-40 resize-none shadow-sm border-t text-sm ${inputBg}`}
-            placeholder="Describe your concern..."
-          />
+        {/* Doctor */}
+        <div>
+          <label className="text-sm mb-1 block">Doctor</label>
+          <select
+            value={doctor}
+            onChange={(e) => setDoctor(e.target.value)}
+            disabled={!appointmentType}
+            className={`w-full py-2 px-3 rounded-lg text-sm focus:outline-none focus:ring-2 ${
+              isLight ? "bg-gray-100 text-black" : "bg-stone-800 text-white"
+            }`}
+          >
+            <option value="">Select doctor</option>
+            {appointmentTypes[appointmentType]?.map((doc) => (
+              <option key={doc}>{doc}</option>
+            ))}
+          </select>
         </div>
 
-        {/* Date Selection */}
-        <div className="flex flex-col gap-2">
-          <h3 className={`${subText} text-sm font-medium`}>Expected Appointment Date</h3>
+        {/* Date */}
+        <div>
+          <label className="text-sm mb-1 block">Date</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className={`rounded-xl p-3 shadow-sm text-sm ${inputBg}`}
-           
+            className={`w-full py-2 px-3 rounded-lg text-sm focus:outline-none focus:ring-2 ${
+              isLight ? "bg-gray-100 text-black" : "bg-stone-800 text-white"
+            }`}
           />
         </div>
 
-        <button
-          type="submit"
-          className={`rounded-full px-4 py-3 mt-4 font-medium tracking-wide shadow-md text-white transition ${
-            rescheduleId
-              ? 'bg-blue-700 border-t border-blue-500 hover:bg-blue-800'
-              : 'bg-green-700 border-t border-green-500 hover:bg-green-800'
+        {/* Time */}
+        <div>
+          <label className="text-sm mb-1 block">Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className={`w-full py-2 px-3 rounded-lg text-sm focus:outline-none focus:ring-2 ${
+              isLight ? "bg-gray-100 text-black" : "bg-stone-800 text-white"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Reason */}
+      <div className="mt-4">
+        <label className="text-sm mb-1 block">Reason for Appointment</label>
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          rows="4"
+          placeholder="Describe symptoms or reason for visit..."
+          className={`w-full rounded-lg py-2 px-3 text-sm resize-none focus:outline-none focus:ring-2 ${
+            isLight ? "bg-gray-100 text-black" : "bg-stone-800 text-white"
           }`}
-        >
-          {rescheduleId ? "Update Appointment" : "Schedule Appointment"}
-        </button>
-      </form>
+        />
+      </div>
+
+      <button
+        onClick={saveAppointment}
+        className="mt-6 w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition"
+      >
+        Save Appointment
+      </button>
+
+      {/* Display Appointments */}
+      {appointments.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-lg font-medium mb-3">Your Appointments</h3>
+          <ul className="space-y-3 text-sm">
+            {appointments.map((appt, i) => (
+              <li key={`appt-${i}`} className={`p-3 rounded-lg border ${isLight ? "border-gray-200" : "border-stone-700"}`}>
+                <p><strong>Type:</strong> {appt.appointmentType}</p>
+                <p><strong>Doctor:</strong> {appt.doctor}</p>
+                <p><strong>Date:</strong> {appt.date}</p>
+                <p><strong>Time:</strong> {appt.time}</p>
+                <p><strong>Reason:</strong> {appt.reason}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </Section>
   );
 };
