@@ -7,6 +7,7 @@ import { PrescriptionHistory } from './sub-screens/PrescriptionHistory';
 
 const Medication = ({ theme }) => {
   const [section, setSection] = useState("💊 Active Medications");
+  
   const isLight = theme === 'light';
 
   const renderSection = () => {
@@ -18,44 +19,51 @@ const Medication = ({ theme }) => {
       case "🧾 Prescriptions History":
         return <PrescriptionHistory theme={theme} />;
       default:
-        console.log("Unable to render section");
+        console.warn("Unknown section.");
+        return null;
     }
   };
 
-  return (
-    <Section className="flex flex-col gap-1 mx-auto container" theme={theme}>
-      <h1 className={`tracking-wide text-md ${isLight ? "text-gray-800" : "text-white"}`}>
-        Medication Tabs
-      </h1>
-      <p className={`${isLight ? "text-gray-600" : "text-stone-600"}`}>
-        Let’s find out more about your medication
-      </p>
+  const baseTabStyle = "text-sm rounded-full px-4 py-2 font-medium transition-all duration-300 border focus:outline-none focus:ring-2 focus:ring-green-400";
 
-      <ul className="flex gap-3 items-center overflow-x-auto mt-2 pb-2">
+  return (
+    <Section className="flex flex-col gap-4 mx-auto container px-4 md:px-8" theme={theme}>
+      <header className="mt-2 space-y-1">
+        <h1 className={`text-[17px] font-semibold tracking-tight ${isLight ? "text-gray-900" : "text-white"}`}>
+          Medication Overview
+        </h1>
+        <p className={`text-sm ${isLight ? "text-gray-600" : "text-stone-400"}`}>
+          Manage your medication confidently and consistently.
+        </p>
+      </header>
+
+      <nav className="flex gap-3 items-center overflow-x-auto scrollbar-none pt-1 pb-3 -mx-1">
         {PatientDashboardElements.MedicationTabs.map((tab, index) => {
           const isActive = section === tab.label;
           return (
-            <li key={`tab-${tab.label}-${index + 1}`}>
-              <button
-                onClick={() => setSection(tab.label)}
-                className={`text-sm rounded-full p-3 shadow-md border-t transition bg-gradient-to-bl ${
-                  isLight
-                    ? isActive
-                      ? "from-green-500 via-green-400 to-green-600 text-white border-green-400 "
-                      : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
-                    : isActive
-                    ? "from-green-600 to-green-800 text-white border-green-400"
-                    : "bg-stone-900 text-white border-neutral-700 hover:border-stone-600"
-                }`}
-              >
-                {tab.label}
-              </button>
-            </li>
+            <button
+              key={`medication-tab-${index}`}
+              aria-pressed={isActive}
+              onClick={() => setSection(tab.label)}
+              className={`${baseTabStyle} 
+                ${isLight
+                  ? isActive
+                    ? "bg-gradient-to-br from-green-400 to-green-600 text-white border-green-500 shadow-md"
+                    : "bg-white text-gray-800 border-gray-300 hover:border-gray-400"
+                  : isActive
+                    ? "bg-gradient-to-br from-green-600 to-green-800 text-white border-green-500 shadow-md"
+                    : "bg-stone-800 text-gray-200 border-stone-700 hover:border-stone-600"}
+              `}
+            >
+              {tab.label}
+            </button>
           );
         })}
-      </ul>
+      </nav>
 
-      {renderSection()}
+      <section className="animate-fadeIn transition-opacity duration-300 ease-in-out">
+        {renderSection()}
+      </section>
     </Section>
   );
 };

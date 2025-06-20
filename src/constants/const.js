@@ -11,7 +11,8 @@ const AdminNavLabels = {
     Earnings: "Earnings",
     Settings: "Settings",
     Support: "Support",
-    LogOff: "Logout"
+    LogOff: "Logout",
+    
 }
 
 const PatientNavLabels = {
@@ -23,7 +24,10 @@ const PatientNavLabels = {
     Notifications: "Notifications",
     Emergency: "Emergency",
     Record: "Record",
-    Consultation: "Consultation"
+    Consultation: "Consultation",
+    Settings: "Settings",
+    Support: "Support",
+    Logout: "Logout"
 
 }
 
@@ -33,7 +37,6 @@ const PatientDashboardElements = {
         { label: PatientNavLabels.Appointments, icon: appointment },
         { label: PatientNavLabels.Medications, icon: medication },
         { label: PatientNavLabels.Record, icon: record},
-        { label: PatientNavLabels.Consultation, icon: consultation },
 
     ],
     SecondaryNavigations: [

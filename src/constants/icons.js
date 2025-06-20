@@ -19,7 +19,8 @@ import inventory from "../assets/icons/outline/inventory-alt.png";
 import earnings from "../assets/icons/outline/sack-dollar.png";
 import notification from "../assets/icons/outline/bell.png";
 import dashboardPanel from "../assets/icons/outline/dashboard-panel.png";
-import placeholderImage from "../assets/icons/placeholder.jpg"
+import placeholderImage from "../assets/icons/placeholder.jpg";
+import menuIcon from "../assets/icons/outline/menu.png"
 
 
 const TechCompanyLogos = [
@@ -36,5 +37,5 @@ export {
     support, search, filter, messageAlert,
     departments, doctors, patient, 
     inventory, earnings, notification,
-    dashboardPanel, placeholderImage 
+    dashboardPanel, placeholderImage, menuIcon 
 }

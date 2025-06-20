@@ -33,11 +33,11 @@ const Home = ({ setScreen, theme, transition }) => {
   const cardText = isLight ? "text-black" : "text-stone-100";
   const subText = isLight ? "text-gray-500" : "text-stone-400";
   const buttonStyle = isLight
-    ? "bg-white/60 text-stone-900 font-medium  hover:border-green-300 shadow-lg hover:shadow-green-600/50"
-    : "bg-neutral-800 hover:bg-green-700 text-stone-200 border-t border-stone-600 shadow-lg hover:shadow-green-800/50";
+    ? "bg-white/60 text-stone-900 font-medium hover:border-green-300 shadow-green-500/10 hover:shadow-green-600/50"
+    : "hover:bg-green-700 text-stone-200 hover:shadow-lg hover:shadow-green-800/50";
 
   return (
-    <Section className="px-6 py-8 space-y-6" theme={theme}>
+    <Section className="md:px-6 py-8 space-y-6" theme={theme}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -51,7 +51,7 @@ const Home = ({ setScreen, theme, transition }) => {
       </div>
 
       {/* Quick Access */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pb-5">
+      <div className="flex flex-wrap gap-4 pb-5">
         {[
           { label: "Consult Doctor", icon: "🩺", renderOnClick: () => setScreen(PatientNavLabels.Consultation) },
           { label: "Book Appointment", icon: "📅", renderOnClick: () => setScreen(PatientNavLabels.Appointments) },
@@ -63,10 +63,10 @@ const Home = ({ setScreen, theme, transition }) => {
           <button
             key={label}
             onClick={renderOnClick}
-            className={`${buttonStyle} transition transform  bg-gradient-to-b hover:from-green-500 hover:to-green-700 hover:text-white hover:scale-105 rounded-2xl px-4 p-6 flex flex-col items-center justify-center active:scale-95`}
+            className={`${buttonStyle} transition size-[6.2rem] sm:size-[5rem] text-stone-600 transform border-2 rounded-[20%] ${theme !== "light" ? "border-stone-800 hover:text-white" : "border-stone-200 hover:shadow-green-500"} hover:border-green-600 hover:scale-105 md:size-[9rem] flex flex-col items-center justify-center active:scale-95`}
           >
             <span className="text-lg">{icon}</span>
-            <span className="mt-1 text-sm tracking-wide">{label}</span>
+            <span className="mt-1 text-xs sm:text-sm tracking-wide ">{label}</span>
           </button>
         ))}
       </div>
