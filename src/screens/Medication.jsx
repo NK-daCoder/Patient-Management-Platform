@@ -27,7 +27,7 @@ const Medication = ({ theme }) => {
   const baseTabStyle = "text-sm rounded-full px-4 py-2 font-medium transition-all duration-300 border focus:outline-none focus:ring-2 focus:ring-green-400";
 
   return (
-    <Section className="flex flex-col gap-4 mx-auto container px-4 md:px-8" theme={theme}>
+    <Section className="flex flex-col gap-4 mx-auto container px-4 md:px-8 pb-8 sm:py-3" theme={theme}>
       <header className="mt-2 space-y-1">
         <h1 className={`text-[17px] font-semibold tracking-tight ${isLight ? "text-gray-900" : "text-white"}`}>
           Medication Overview

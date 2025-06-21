@@ -9,7 +9,7 @@ const Home = ({ setScreen, theme, transition }) => {
   const isLight = theme === 'light';
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("appointments")) || [];
+    const stored = JSON.parse(localStorage.getItem("patient_appointments")) || [];
 
     const upcoming = stored
       .filter(appt => new Date(appt.date) >= new Date())
@@ -21,7 +21,7 @@ const Home = ({ setScreen, theme, transition }) => {
   const cancelAppointment = (id) => {
     const updated = appointments.filter(appt => appt.id !== id);
     setAppointments(updated);
-    localStorage.setItem("appointments", JSON.stringify(updated));
+    localStorage.setItem("patient_appointments", JSON.stringify(updated));
   };
 
   const rescheduleAppointment = (appt) => {
@@ -32,13 +32,9 @@ const Home = ({ setScreen, theme, transition }) => {
   const cardBg = isLight ? "bg-white " : "bg-neutral-800 border-stone-500";
   const cardText = isLight ? "text-black" : "text-stone-100";
   const subText = isLight ? "text-gray-500" : "text-stone-400";
-  const buttonStyle = isLight
-    ? "bg-white/60 text-stone-900 font-medium hover:border-green-300 shadow-green-500/10 hover:shadow-green-600/50"
-    : "hover:bg-green-700 text-stone-200 hover:shadow-lg hover:shadow-green-800/50";
 
   return (
     <Section className="md:px-6 py-8 space-y-6" theme={theme}>
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className={`text-xl font-semibold tracking-wide ${cardText}`}>
@@ -50,80 +46,50 @@ const Home = ({ setScreen, theme, transition }) => {
         </div>
       </div>
 
-      {/* Quick Access */}
-      <div className="flex flex-wrap gap-4 pb-5">
-        {[
-          { label: "Consult Doctor", icon: "🩺", renderOnClick: () => setScreen(PatientNavLabels.Consultation) },
-          { label: "Book Appointment", icon: "📅", renderOnClick: () => setScreen(PatientNavLabels.Appointments) },
-          { label: "Prescriptions", icon: "💊", renderOnClick: () => setScreen(PatientNavLabels.Medications) },
-          { label: "Records", icon: "📁", renderOnClick: () => setScreen(PatientNavLabels.Records) },
-          { label: "Notifications", icon: "📣", renderOnClick: () => setScreen(PatientNavLabels.Notifications) },
-          { label: "Emergency", icon: "🚨", renderOnClick: () => setScreen(PatientNavLabels.Emergency) },
-        ].map(({ label, icon, renderOnClick }) => (
-          <button
-            key={label}
-            onClick={renderOnClick}
-            className={`${buttonStyle} transition size-[6.2rem] sm:size-[5rem] text-stone-600 transform border-2 rounded-[20%] ${theme !== "light" ? "border-stone-800 hover:text-white" : "border-stone-200 hover:shadow-green-500"} hover:border-green-600 hover:scale-105 md:size-[9rem] flex flex-col items-center justify-center active:scale-95`}
-          >
-            <span className="text-lg">{icon}</span>
-            <span className="mt-1 text-xs sm:text-sm tracking-wide ">{label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Upcoming Appointments */}
+      {/* Appointments */}
       <div className={`${cardBg} rounded-2xl p-5 shadow-md border-t pb-5`}>
         <h2 className={`tracking-wide text-md font-medium mb-3 ${cardText}`}>Upcoming Appointments</h2>
         {appointments.length === 0 ? (
           <p className={`${subText} text-sm tracking-wide`}>You have no upcoming appointments 📭</p>
         ) : (
           <div className="space-y-4 max-h-64 overflow-y-auto pr-2">
-            {appointments.map((appt) => (
-              <div
-                key={appt.id}
-                className={`${isLight ? "bg-gray-50" : "bg-neutral-900"} p-4 rounded-xl shadow flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0`}
-              >
-                <div>
-                  <p className={`${cardText} text-sm font-medium`}>
-                    {appt.doctor} — {new Date(appt.date).toDateString()}
-                  </p>
-                  <p className={`${subText} text-xs mt-1`}>"{appt.reason}"</p>
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => rescheduleAppointment(appt)}
-                    className="px-3 py-1 rounded-xl bg-blue-700 border-t border-blue-500 text-xs text-white hover:bg-blue-600 transition"
-                  >
-                    Reschedule
-                  </button>
-                  <button
-                    onClick={() => cancelAppointment(appt.id)}
-                    className="px-3 py-1 rounded-xl bg-rose-600 border-t border-rose-400 text-xs text-white hover:bg-rose-500 transition"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ))}
+            <ul className="space-y-3 text-sm">
+              {appointments.map((appt, i) => (
+                <li key={appt.id} className={`p-6 rounded-lg border-t shadow-md ${isLight ? "border-gray-200 bg-neutral-100" : "border-stone-700 bg-stone-900"}`}>
+                  <article className="flex flex-col gap-1">
+                    <p><strong>Type:</strong> {appt.appointmentType}</p>
+                    <p><strong>Doctor:</strong> {appt.doctor}</p>
+                    <p><strong>Date:</strong> {appt.date}</p>
+                    <p><strong>Time:</strong> {appt.time}</p>
+                    <p><strong>Reason:</strong> {appt.reason}</p>
+                    <div className="flex gap-2 mt-5">
+                      <button
+                        type="button"
+                        className="text-white bg-gradient-to-b from-green-400 to-green-600 transform hover:scale-105 shadow-md rounded-full p-2"
+                        onClick={() => rescheduleAppointment(appt)}
+                      >
+                        Reschedule
+                      </button>
+                      <button
+                        type="button"
+                        className="text-red-500 hover:text-red-700 font-medium"
+                        onClick={() => cancelAppointment(appt.id)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
 
-      {/* Medication Summary */}
-      <div className={`${cardBg} rounded-2xl p-5 shadow-md border-t pb-5`}>
-        <h2 className={`text-lg font-medium mb-2 ${cardText}`}>Current Prescriptions</h2>
-        <ul className={`space-y-2 text-sm ${subText}`}>
-          <li>• Lisinopril 10mg – 2 Refills Left</li>
-          <li>• Metformin 500mg – 1 Refill Left</li>
-          <li>• Vitamin D – Active</li>
-        </ul>
-      </div>
-
       {/* Trackers */}
-      <div className="grid gap-4">
-        <DailyHealthTracker theme={theme} />
-        <BloodPressureTracker theme={theme}/>
-      </div>
+      <DailyHealthTracker theme={theme} />
+      <BloodPressureTracker theme={theme} />
+      <div className="sm:hidden h-[4rem]" aria-hidden={true}></div>
     </Section>
   );
 };

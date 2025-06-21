@@ -65,7 +65,7 @@ const MedicationReminder = ({ theme }) => {
   };
 
   return (
-    <Section className="space-y-6" theme={theme}>
+    <Section className="space-y-6 " theme={theme}>
       {/* Form Block */}
       <div className={`${isLight ? 'bg-white text-gray-800' : 'bg-stone-900 text-stone-200'} p-5 rounded-xl shadow-md space-y-4`}>
         <h2 className="text-xl font-semibold">Medication Reminder</h2>
@@ -162,6 +162,7 @@ const MedicationReminder = ({ theme }) => {
           ))
         )}
       </div>
+      <div className="sm:hidden h-[4rem]" aria-hidden={true}></div>
     </Section>
   );
 };

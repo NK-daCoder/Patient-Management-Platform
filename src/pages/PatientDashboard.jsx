@@ -36,9 +36,9 @@ const PatientDashboard = () => {
   return (
     <section className={`${theme === "light" ? "bg-white text-black" : "bg-neutral-900 text-white"} flex`}>
       <nav
-        className={`md:stick md:top-0 group shadow-md md:h-screen border-r 
+        className={`md:stick md:top-0 group shadow-md md:h-screen sm:border-r 
         ${theme === "light" ? "bg-neutral-100 border-gray-200" : "bg-neutral-950 border-neutral-900"} 
-        fixed bottom-0 left-0 z-50  md:static flex flex-row md:flex-col justify-between sm:px-2 sm:py-6 transition-all duration-300 overflow-hidden sm:w-[25%] md:w-[9%] lg:w-[5.5%] lg:hover:w-[15%]`}
+        fixed -bottom-1 left-0 z-50  md:static flex flex-row md:flex-col justify-between sm:px-2 sm:py-6 transition-all duration-300 overflow-hidden sm:w-[25%] md:w-[9%] lg:w-[5.5%] lg:hover:w-[15%]`}
       >
         <section>
           <Link to={CareNetPatients.patientDashBoard} className="hidden border-b border-neutral-600/20 pb-5 sm:flex flex-col lg:flex-row items-center gap-2 transition-all duration-200">
@@ -112,7 +112,7 @@ const PatientDashboard = () => {
                   fixed left-0 top-[4.3rem] w-full overflow-hidden border-b z-40
                   ${burgerMenuIsOpen ? "max-h-[300px] py-4 px-6" : "max-h-0 py-0 px-6"}
                   transition-all duration-500 ease-in-out
-                  ${theme !== "light" ? "bg-stone-900 border-stone-600" : "bg-neutral-100 border-neutral-300"}
+                  ${theme !== "light" ? "bg-neutral-950 border-stone-600" : "bg-neutral-100 border-neutral-300"}
                 `}
               >
                 <ul className="flex flex-col gap-4">
@@ -125,7 +125,7 @@ const PatientDashboard = () => {
                         }}
                         className="flex items-center gap-3 w-full text-left"
                       >
-                        <img src={item.icon} alt={item.label} className="size-5" />
+                        <img src={item.icon} alt={item.label} className={`size-5 ${theme !== "light" ? "filter brightness-0 invert" : ""}`} />
                         <span className="text-stone-400 text-sm tracking-wide">{item.label}</span>
                       </button>
                     </li>
@@ -138,14 +138,15 @@ const PatientDashboard = () => {
         </header>
 
         {/* 🔄 Animated Section Switcher */}
-        <main className="fade-wrapper py-8 sm:p-0 sm:mt-4">
+        <main className="fade-wrapper py-8 sm:p-0 sm:mt-4 h-screen md:h-auto">
           <div className={isActive("Home")}><Home setScreen={setSelectedSection} theme={theme} /></div>
-          <div className={isActive("Appointments")}><Appointments theme={theme} /></div>
+          <div className={`${isActive("Appointments")} flex flex-col justify-center items-center h-full`}><Appointments theme={theme} /></div>
           <div className={isActive("Medications")}><Medication theme={theme} /></div>
           <div className={isActive("Record")}><Records /></div>
           <div className={isActive("Settings")}><Settings theme={theme} setTheme={setTheme} /></div>
         </main>
       </section>
+     
     </section>
   );
 };
